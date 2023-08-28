@@ -4,13 +4,6 @@
     border-radius: 50%;
 }
 
-#details {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
 #meal-header {
     width: 75%;
     margin: auto;

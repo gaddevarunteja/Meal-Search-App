@@ -2,12 +2,14 @@ if(localStorage.getItem("favMealsList") == undefined) {
     localStorage.setItem("favMealsList", JSON.stringify([]));
 }
 
+// fetch API Call
 async function fetchMealsFromApi(url, searchInput) {
     let res =  await fetch(`${url + searchInput}`);
     let meals = await res.json();
     return meals;
 }
   
+// function that shows meals based on search input 
 function showMealsOnSearch() {
     let searchInput = document.getElementById('search-input-value').value;
     let favs = JSON.parse(localStorage.getItem("favMealsList"));
@@ -27,8 +29,8 @@ function showMealsOnSearch() {
                         <img src="${meal.strMealThumb}" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-title">${meal.strMeal}</h5>
-                            <button type="button" class="btn btn-outline-dark" onclick="showMealDetails(${meal.idMeal})">More Details</button>
-                            <button id="main${meal.idMeal}" class="btn btn-outline-dark ${classFav}" onclick="addRemoveToFavList(${meal.idMeal}, false)" style="border-radius:50%"><i class="fa-solid fa-heart"></i></button>
+                            <button class="btn btn-outline-dark" onclick="showMealDetails(${meal.idMeal})">More Details</button>
+                            <button class="btn btn-outline-dark ${classFav}" onclick="addRemoveToFavList(${meal.idMeal}, false)" style="border-radius:50%"><i class="fa-solid fa-heart"></i></button>
                         </div>
                     </div>
                     `;
@@ -40,6 +42,7 @@ function showMealsOnSearch() {
     });
 }
 
+// function that displays indiviudal meal item
 function showMealDetails(id) {
     let fetchUrl = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=";
     let html = "";
@@ -52,7 +55,7 @@ function showMealDetails(id) {
                     <div id="img-meal">
                         <img class="mb-2" src="${data.meals[0].strMealThumb}">
                     </div>
-                    <div id="details">
+                    <div class="d-flex justify-content-center flex-wrap flex-column align-items-center">
                         <h4> ${data.meals[0].strMeal} </h4>
                         <h6> Category: ${data.meals[0].strCategory} </h6>
                         <h6> Area: ${data.meals[0].strArea} </h6>
@@ -69,6 +72,7 @@ function showMealDetails(id) {
     
 }
 
+// function that shows favourite meals
 function showFavMeals() {
     let favs = JSON.parse(localStorage.getItem("favMealsList"));
     let html = "";
@@ -80,14 +84,14 @@ function showFavMeals() {
         for(var i = 0; i < favs.length; i++) {
             let meal = fetchMealsFromApi(fetchUrl, favs[i]);
             meal.then(data => {             
-                console.log(data);
+                // console.log(data);
                     html += 
                     `<div class="card mb-3" style="width: 20rem;">
                         <img src="${data.meals[0].strMealThumb}" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-title">${data.meals[0].strMeal}</h5>
-                            <button type="button" class="btn btn-outline-dark" onclick="showMealDetails(${data.meals[0].idMeal})">More Details</button>
-                            <button id="main${data.meals[0].idMeal}" class="btn btn-outline-dark active" onclick="addRemoveToFavList(${data.meals[0].idMeal}, true)" style="border-radius:50%"><i class="fa-solid fa-heart"></i></button>
+                            <button class="btn btn-outline-dark" onclick="showMealDetails(${data.meals[0].idMeal})">More Details</button>
+                            <button class="btn btn-outline-dark active" onclick="addRemoveToFavList(${data.meals[0].idMeal}, true)" style="border-radius:50%"><i class="fa-solid fa-heart"></i></button>
                         </div>
                     </div>
                     `;
@@ -97,6 +101,8 @@ function showFavMeals() {
     }
 }
 
+
+// function to toggle favorite item based on user click
 function addRemoveToFavList(id, isFav) {
     let favs = JSON.parse(localStorage.getItem('favMealsList'));
     let isPresent = false;
